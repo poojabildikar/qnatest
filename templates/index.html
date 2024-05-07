@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cascade</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        select, input[type="text"], input[type="submit"] {
+            width: calc(100% - 16px);
+            margin-top: 5px;
+            padding: 8px;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        #result {
+            background: white;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 20px auto;
+        }
+    </style>
+    <script>
+    $(document).ready(function(){
+        $('form').on('submit', function(event){
+            event.preventDefault(); // Prevent page reload
+
+            $.ajax({
+                type: 'POST',
+                url: '/',
+                data: $(this).serialize(),
+                success: function(data){
+                    $('#result').html(data); // Display result
+                },
+                error: function(){
+                    $('#result').html('<p>Error processing your request</p>');
+                }
+            });
+        });
+    });
+    </script>
+</head>
+<body>
+    <h2>Select a Document and Submit Your Question</h2>
+    <form method="post">
+        <label for="file_name">Select file:</label>
+        <select id="file_name" name="file_name">
+        {% for file in files %}
+            <option value="{{ file }}">{{ file }}</option>
+        {% endfor %}
+        </select>
+
+        <label for="question">Enter your question:</label>
+        <input type="text" id="question" name="question">
+
+        <input type="submit" value="Submit Query">
+    </form>
+    <div id="result"></div>
+</body>
+</html>
